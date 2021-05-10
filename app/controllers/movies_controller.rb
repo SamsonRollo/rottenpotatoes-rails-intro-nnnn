@@ -1,6 +1,7 @@
 class MoviesController < ApplicationController
 
-	before_action :check_boxes
+	#before_action :check_boxes
+	#after_action :store_param
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -11,7 +12,8 @@ class MoviesController < ApplicationController
   def index
   	@all_ratings = Movie.all_ratings
   	@ratings_to_show = check_boxes
-    @movies = Movie.with_ratings(params[:ratings])
+  	@order = params[:order]
+    @movies = Movie.with_ratings(params[:ratings], params[:order])
   end
 
   def new
@@ -20,9 +22,9 @@ class MoviesController < ApplicationController
 
   def check_boxes
   	if params[:ratings] == nil
-  		$ratings = []
+  		[]
   	else
-  		$ratings = params[:ratings]
+  		params[:ratings]
   	end
   end
 

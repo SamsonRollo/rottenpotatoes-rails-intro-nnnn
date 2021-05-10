@@ -4,11 +4,24 @@ class Movie < ActiveRecord::Base
 		['G','PG','PG-13','R']
 	end
 
-	def self.with_ratings(ratings_list)
+	def self.with_ratings(ratings_list, order)
 		if ratings_list==nil
-			all
+			if order == "release_date"
+				all.order(:release_date)
+			elsif order == "title"
+				all.order(:title)
+			else
+				all
+			end	
+				
 		else
-			self.where(rating: ratings_list.keys)
+			if order == "release_date"
+				self.where(rating: ratings_list.keys).order(:release_date)
+			elsif order == "title"
+				self.where(rating: ratings_list.keys).order(:title)
+			else				
+				self.where(rating: ratings_list.keys)
+			end
 		end
 	end
 end

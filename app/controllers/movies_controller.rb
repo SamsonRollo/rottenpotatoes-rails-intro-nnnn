@@ -1,7 +1,6 @@
 class MoviesController < ApplicationController
 
-	#before_action :check_boxes
-	#after_action :store_param
+  helper_method :which_head
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -12,8 +11,15 @@ class MoviesController < ApplicationController
   def index
   	@all_ratings = Movie.all_ratings
   	@ratings_to_show = check_boxes
-  	@order = params[:order]
-    @movies = Movie.with_ratings(params[:ratings], params[:order])
+    @movies = Movie.with_ratings(params[:ratings]).order(order_status)
+  end
+
+  def which_head(id)
+  	if params[:order] == id
+  		"hilite bg-warning"
+  	else
+  		""
+  	end
   end
 
   def new
@@ -50,6 +56,11 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def order_status
+  	sortable = ['title', 'release_date']
+  	sortable.include?(params[:order])? params[:order] : nil
   end
 
   private

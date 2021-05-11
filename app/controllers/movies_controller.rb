@@ -10,7 +10,7 @@ class MoviesController < ApplicationController
 
   def index
   	@all_ratings = Movie.all_ratings
-  	@ratings_to_show = check_boxes
+  	@ratings_to_show = params[:ratings]==nil ? [] : params[:ratings] 
     @movies = Movie.with_ratings(params[:ratings]).order(order_status)
   end
 
@@ -24,14 +24,6 @@ class MoviesController < ApplicationController
 
   def new
     # default: render 'new' template
-  end
-
-  def check_boxes
-  	if params[:ratings] == nil
-  		[]
-  	else
-  		params[:ratings]
-  	end
   end
 
   def create
